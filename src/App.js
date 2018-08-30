@@ -4,7 +4,11 @@ import { getRepos } from "./redux";
 
 // App.js
 export class App extends Component {
-  state = { username: "tylerbuchea" };
+  constructor(props) {
+    console.log("props", props);
+    super(props);
+    this.state = { username: "tylerbuchea" };
+  }
 
   componentDidMount() {
     this.updateRepoList(this.state.username);
@@ -13,15 +17,20 @@ export class App extends Component {
     this.props.getRepos(username);
   };
   render() {
-    return <div className="fontColor">
-        <h2>Check Github</h2>
-        <input type="text" value={this.state.username} onChange={e => this.setState(
-              { username: e.target.value }
-            )} />
-        <button onClick={() => {
+    return (
+      <div className="fontColor">
+        <h2>Check {this.state.username} Repo</h2>
+        <input
+          type="text"
+          value={this.state.username}
+          onChange={e => this.setState({ username: e.target.value })}
+        />
+        <button
+          onClick={() => {
             this.updateRepoList(this.state.username);
-          }}>
-          Get user Repo
+          }}
+        >
+          Get users Repo
         </button>
         <ul>
           {this.props.repos.map((repo, index) => (
@@ -32,12 +41,14 @@ export class App extends Component {
             </li>
           ))}
         </ul>
-      </div>;
+      </div>
+    );
   }
 }
 
 // AppContainer.js
-const mapStateToProps = (state, ownProps) => ({ repos: state.repos });
+const mapStateToProps = (state) => ({ repos: state.repos }
+);
 const mapDispatchToProps = { getRepos };
 const AppContainer = connect(
   mapStateToProps,

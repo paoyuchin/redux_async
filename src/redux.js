@@ -1,22 +1,27 @@
 import { applyMiddleware, combineReducers, createStore } from "redux";
 import thunk from "redux-thunk";
+import logger from "redux-logger";
 
 // actions.js
-export const addRepos = repos => ({
+//decide what actions will be used
+
+export const addRepos = repos => (
+  {
   type: "ADD_REPOS",
   repos
 });
 
-export const clearRepos = () => ({
-  type: "CLEAR_REPOS"
-});
+export const clearRepos = () => ({ type: "CLEAR_REPOS" });
 
 export const getRepos = userName => async dispatch => {
   try {
     const url = `https://api.github.com/users/${userName}/repos?sort=updated`;
     const response = await fetch(url);
-    const responseBody = await response.json();
-    dispatch(addRepos(responseBody));
+    console.log("response", response);
+    const resData = await response.json();
+    dispatch(addRepos(resData));
+    //
+    //call action from another action
   } catch (error) {
     console.log("error occured!!!!!!!!!!");
     dispatch(clearRepos());
@@ -37,8 +42,4 @@ export const repos = (state = [], action) => {
 export const reducers = combineReducers({ repos });
 
 // store.js
-export function configureStore(initialState = {}) {
-  const store = createStore(reducers, initialState, applyMiddleware(thunk));
-  return store;
-}
-export const store = configureStore();
+export const store = createStore(reducers, applyMiddleware(logger , thunk));
