@@ -13,15 +13,17 @@ export const addRepos = repos => (
 
 export const clearRepos = () => ({ type: "CLEAR_REPOS" });
 
+
 export const getRepos = userName => async dispatch => {
   try {
     const url = `https://api.github.com/users/${userName}/repos?sort=updated`;
+    //set url
     const response = await fetch(url);
-    console.log("response", response);
+    //use await method to fetch url
     const resData = await response.json();
+    //use await method to change to json 
     dispatch(addRepos(resData));
-    //
-    //call action from another action
+    //dispatch result data to action from another action
   } catch (error) {
     console.log("error occured!!!!!!!!!!");
     dispatch(clearRepos());
