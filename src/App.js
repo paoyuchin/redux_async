@@ -1,42 +1,40 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { getRepos } from "./redux";
+import { getRepo } from "./redux";
 
 // App.js
+
 export class App extends Component {
   constructor(props) {
-    console.log("props", props);
+    console.log(props)
     super(props);
-    this.state = { username: "tylerbuchea" };
+    this.state = { username: "paoyuchin" };
   }
-
   componentDidMount() {
     this.updateRepoList(this.state.username);
   }
-  updateRepoList = username => {
-    this.props.getRepos(username);
-  };
+  updateRepoList(username) {
+    this.props.getRepo(username);
+  }
   render() {
     return (
-      <div className="fontColor">
-        <h2>Check {this.state.username} Repo</h2>
+      <div>
+        <h2>Get {this.state.username} Repo</h2>
         <input
           type="text"
           value={this.state.username}
-          onChange={e => this.setState({ username: e.target.value })}
-        />
-        <button
-          onClick={() => {
-            this.updateRepoList(this.state.username);
+          onChange={e => {
+            this.setState({ username: e.target.value });
           }}
-        >
-          Get users Repo
+        />
+        <button onClick={() => this.updateRepoList(this.state.username)}>
+          Send
         </button>
         <ul>
-          {this.props.repos.map((repo, index) => (
-            <li className="liDecor" key={index}>
-              <a href={repo.html_url} target="_blank">
-                {repo.name}
+          {this.props.reposData.map((currentValue, index) => (
+            <li key={index}>
+              <a href={currentValue.html_url} target="_blank">
+              {currentValue.name}
               </a>
             </li>
           ))}
@@ -47,12 +45,18 @@ export class App extends Component {
 }
 
 // AppContainer.js
-const mapStateToProps = (state) => ({ repos: state.repos }
-);
-const mapDispatchToProps = { getRepos };
-const AppContainer = connect(
+
+const mapStateToProps = state => (
+  {
+    reposData: state.repos
+  });
+
+const mapDispatchToProps = { getRepo };
+
+export const AppContainer = connect(
   mapStateToProps,
   mapDispatchToProps
 )(App);
 
 export default AppContainer;
+//smart container
